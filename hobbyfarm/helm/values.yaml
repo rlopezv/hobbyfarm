@@ -1,0 +1,63 @@
+# admin:
+#   image: hobbyfarm/admin-ui:v0.2.1
+# gargantua:
+#   dynamicBaseNamePrefix: dynamic
+#   image: hobbyfarm/gargantua:v0.1.7
+#   logLevel: "0"
+#   scheduledBaseNamePrefix: scheduled
+ingress:
+  annotations: {
+    kubernetes.io/ingress.class: nginx
+  }
+  enabled: true
+  hostnames:
+    ui: ui.hobbyfarm.com
+    admin: admin.hobbyfarm.com
+    backend: hf.hobbyfarm.com
+    shell: shell.hobbyfarm.com  
+    ranchervm: {}
+  tls:
+    enabled: false
+insecure: true
+ranchervm:
+  bridge: en0
+  enabled: false
+  image:
+    frontend: rancher/vm-frontend:v0.2.0
+    novnc: rancher/vm-novnc:v0.2.0
+    tools: rancher/vm-tools:v0.2.0
+    vm: rancher/vm:v0.2.0
+  nic: eth0
+seed:
+  enabled: false
+shell:
+  replicas: 1
+terraform:
+  # aws:
+  #   image: ami-04763b3055de4860b
+  #   module: https://github.com/hobbyfarm/tf-module-aws
+  #   region: us-east-1
+  controller:
+    image: hobbyfarm/terraform-controller
+    tag: "12032019"
+    threads: 2
+  # do:
+  #   module: https://github.com/dramich/domodule
+  enabled: true
+  executor:
+    image: oats87/terraform-controller-executor
+    tag: hfv1
+  # google:
+  #   module: https://github.com/boxboat/tf-module-google
+  provider: ranchervm
+  ranchervm:
+    access_key: "admin"
+    endpoint: https://172.22.101.101/k8s/clusters/c-sd5qv
+    image: rancher/vm-ubuntu:16.04.5-server-amd64
+    module: https://github.com/hobbyfarm/tf-module-rvm
+    secret_key: "admin"
+  # vsphere:
+  #   module: https://github.com/hobbyfarm/tf-module-vsphere
+ui:
+  image: hobbyfarm/ui:v0.4.4
+
